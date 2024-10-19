@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stemming Site</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-8">
+          <div class="card shadow-sm">
+            <div class="card-header text-center bg-primary text-white">
+              <h1>Selamat Datang di Stemming Site</h1>
+              <p class="mt-2">Menggunakan Algoritma Nazief-Adriani</p>
+            </div>
+            <div class="card-body">
+              <form
+                id="stemmingForm"
+                action="{{ url_for('stem') }}"
+                method="POST"
+                class="form-inline justify-content-center"
+              >
+                <input
+                  type="text"
+                  name="kalimat"
+                  class="form-control mb-2 mr-sm-2"
+                  placeholder="Masukkan kalimat"
+                  required
+                />
+                <button type="submit" class="btn btn-primary mb-2">
+                  Cek Stemming
+                </button>
+                <button type="reset" class="btn btn-secondary mb-2 ml-2">
+                  Bersihkan
+                </button>
+              </form>
+              <div id="loader" class="text-center mt-3" style="display: none">
+                <div class="spinner-border" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+              {% if hasil_stemming %}
+              <div id="result" class="mt-4">
+                <h2>Hasil Stemming:</h2>
+                <p><strong>Kalimat Asli:</strong> {{ kalimat }}</p>
+                <p>
+                  <strong>Jumlah Kata:</strong> {{ kalimat.split()|length }}
+                </p>
+                <p><strong>Kata Dasar:</strong> {{ hasil_stemming }}</p>
+                <p>
+                  <strong>Jumlah Kata Dasar:</strong> {{
+                  hasil_stemming.split()|length }}
+                </p>
+                <div class="mt-3">
+                  <h4>Detail Proses Stemming:</h4>
+                  <ul class="list-group">
+                    {% for word, stemmed_word in detail_proses %}
+                    <li class="list-group-item">
+                      <strong>{{ word }}</strong> &rarr; {{ stemmed_word }}
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      document.getElementById("stemmingForm").onsubmit = function () {
+        document.getElementById("loader").style.display = "block";
+        document.getElementById("result").style.display = "none";
+      };
+    </script>
+  </body>
+</html>
